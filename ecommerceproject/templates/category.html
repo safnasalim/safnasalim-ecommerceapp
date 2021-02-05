@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.desc |truncatewords:155 }}
+    {% else %}
+        Welcome to NOMO, Here you can buy anything you want.
+    {% endif %}
+{% endblock %}
+{% block titile %}
+    {% if category %}
+        {{category.name}} - NoMo
+    {% else %}
+        NoMo cart
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if category %}
+        <div class="row my_row_class">
+            <div class="mx-auto">
+                <p><a href="{% url 'ecommerceapp:allProdCat' %}"> Our product collections </a>{{category.name}}</p>
+            </div>
+        </div>
+    {% endif %}
+<div class="mx-auto">
+    {% if category %}
+        <img class="my_image" src="{{category.image.url}}"  alt="{{category.name}}">
+</div><br>
+<div>
+     <h1 class="text-center my_title">{{category.name}}</h1>
+     <p class="text_justify">{{category.desc}}</p>
+</div>
+{% else %}
+<div>
+    <center><img class="my_image my_image_padding" src="{% static 'img/baner.png' %}" style="width:1250px;" alt=""></center>
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title" >YoLo product collections </h1>
+    <p class="text-justify">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book.</p>
+</div>
+{% endif %}
+<div class="container">
+    <div class="row max-auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4">
+            <div class="card text-center" style="min-width:18rem;">
+                <a href="{{product.get_url}}"><img src="{{product.image.url}}" style="width:250px;height:250px;" alt="{{product.name}}"> </a>
+            <div class="card-body">
+                <h4>{{product.name}}</h4>
+                <p>${{product.price}}</p>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} activate {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
